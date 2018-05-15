@@ -1,0 +1,36 @@
+MPLINK 4.35, Linker
+Linker Map File - Created Tue May 08 01:27:16 2018
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000002
+                   .org_2       code   0x000004    program   0x000002
+                   .org_3       code   0x000007    program   0x000018
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000000      
+                            0x000004    0x000004      
+                            0x000007    0x000012      
+            14 out of 1093 program addresses used, program memory utilization is 1%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     main   0x000007    program     static D:\Users\Alumno\Desktop\Bruno Sasschetti\TP1-TecnicasDigitalesII.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     main   0x000007    program     static D:\Users\Alumno\Desktop\Bruno Sasschetti\TP1-TecnicasDigitalesII.asm
+
+
