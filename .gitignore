@@ -1,2 +1,5 @@
 .ssh
 .viminfo
+nbproject
+build
+dist
