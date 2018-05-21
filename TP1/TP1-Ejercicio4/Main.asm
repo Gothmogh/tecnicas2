@@ -14,20 +14,20 @@ test_loc equ 0x46
 ; -------------------------------------------------------------------
 ; Vectores
 ; ------------------------------------------------------------------
-ORG 0x000 ; processor reset vector
-goto main ; go to beginning of program
-ORG 0x004 ; interrupt vector location
-goto main ;
+    ORG 0x000 ; processor reset vector
+    goto main ; go to beginning of program
+    ORG 0x004 ; interrupt vector location
+    goto main ;
 ; ============================================
 ; PROGRAMA PRINCIPAL
 ; ============================================
-org prog_start
+    org prog_start
 main
-movlw literal_value ; seteo literal en registro w
-iorwf test_loc,f ; opero con registro test y almaceno ahi mismo
+    movlw literal_value ; seteo literal en registro w
+    iorwf test_loc,f ; opero con registro test y almaceno ahi mismo
  
 ;**********************************************************************
-goto $
-END ; directive 'end of program'
+    goto $
+    END ; directive 'end of program'
 
  

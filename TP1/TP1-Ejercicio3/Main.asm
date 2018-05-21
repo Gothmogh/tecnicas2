@@ -16,24 +16,24 @@ result_loc equ 0x28
 ; -------------------------------------------------------------------
 ; Vectores
 ; ------------------------------------------------------------------
-ORG 0x000 ; processor reset vector
-goto main ; go to beginning of program
-ORG 0x004 ; interrupt vector location
-goto main ;
+    ORG 0x000 ; processor reset vector
+    goto main ; go to beginning of program
+    ORG 0x004 ; interrupt vector location
+    goto main ;
 ; ============================================
 ; PROGRAMA PRINCIPAL
 ; ============================================
-org prog_start
+    org prog_start
 main
-clrw ; seteo a cero registro w
-clrf result_loc ; seteo a cero registro result
-addwf number_1_loc,w ;sumo registro 1 con w y almaceno en w
-addwf number_2_loc,w ;sumo registro 1 con w y almaceno en w
-addwf number_3_loc,w ;sumo registro 1 con w y almaceno en w
-movwf result_loc ;sumo registro 1 con w y almaceno en w
+    clrw ; seteo a cero registro w
+    clrf result_loc ; seteo a cero registro result
+    addwf number_1_loc,w ;sumo registro 1 con w y almaceno en w
+    addwf number_2_loc,w ;sumo registro 1 con w y almaceno en w
+    addwf number_3_loc,w ;sumo registro 1 con w y almaceno en w
+    movwf result_loc ;sumo registro 1 con w y almaceno en w
  
 ;**********************************************************************
-goto $
-END ; directive 'end of program'
+    goto $
+    END ; directive 'end of program'
 
  

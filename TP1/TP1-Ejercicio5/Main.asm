@@ -15,21 +15,21 @@ result_loc equ 0x3C
 ; -------------------------------------------------------------------
 ; Vectores
 ; ------------------------------------------------------------------
-ORG 0x000 ; processor reset vector
-goto main ; go to beginning of program
-ORG 0x004 ; interrupt vector location
-goto main ;
+    ORG 0x000 ; processor reset vector
+    goto main ; go to beginning of program
+    ORG 0x004 ; interrupt vector location
+    goto main ;
 ; ============================================
 ; PROGRAMA PRINCIPAL
 ; ============================================
-org prog_start
+    org prog_start
 main
-movf number_2_loc,w ; seteo numero 2 en registro w
-subwf number_1_loc,w ; le resto valor en w (numero 2) a numero 1 y guardo en w
-movwf result_loc ; almaceno valor de w (resultado resta) en ubicacion final
- 
+    movf number_2_loc,w ; seteo numero 2 en registro w
+    subwf number_1_loc,w ; le resto valor en w (numero 2) a numero 1 y guardo en w
+    movwf result_loc ; almaceno valor de w (resultado resta) en ubicacion final
+
 ;**********************************************************************
-goto $
-END ; directive 'end of program'
+    goto $
+    END ; directive 'end of program'
 
  

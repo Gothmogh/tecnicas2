@@ -15,21 +15,21 @@ false_dest equ 0x12A
 ; -------------------------------------------------------------------
 ; Vectores
 ; ------------------------------------------------------------------
-ORG 0x000 ; processor reset vector
-goto main ; go to beginning of program
-ORG 0x004 ; interrupt vector location
-goto main ;
+    ORG 0x000 ; processor reset vector
+    goto main ; go to beginning of program
+    ORG 0x004 ; interrupt vector location
+    goto main ;
 ; ============================================
 ; PROGRAMA PRINCIPAL
 ; ============================================
-org prog_start
+    org prog_start
 main
-movf test_reg,f ; muevo registro sobre si mismo para setear flag Z en reg Status
-btfss STATUS,Z ; analizo status Z, si es 0 continua, si es 1 saltea un paso
-goto false_dest
-goto true_dest
+    movf test_reg,f ; muevo registro sobre si mismo para setear flag Z en reg Status
+    btfss STATUS,Z ; analizo status Z, si es 0 continua, si es 1 saltea un paso
+    goto false_dest
+    goto true_dest
 ;**********************************************************************
-goto $
-END ; directive 'end of program'
+    goto $
+    END ; directive 'end of program'
 
  
