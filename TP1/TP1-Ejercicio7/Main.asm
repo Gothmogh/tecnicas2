@@ -1,4 +1,3 @@
-; Ejemplificación con variables:
 ; ------------------------------------------------------------------
 ; Encabezado
 ; ------------------------------------------------------------------
@@ -7,12 +6,11 @@
 ; ------------------------------------------------------------------
 ; Definición de Variables
 ; ------------------------------------------------------------------
-; acá van las definiciones de las variables con su posición
-prog_start equ 0x005
-swap_mode_loc equ 0x11
-rot_mode_loc equ 0x12
-rot_tmp_loc equ 0x13
-
+num1 equ 0x15
+num2 equ 0x16
+temp1 equ 0x20
+temp2 equ 0x21
+temp_result equ 0x22
 ; -------------------------------------------------------------------
 ; Vectores
 ; ------------------------------------------------------------------
@@ -23,31 +21,32 @@ rot_tmp_loc equ 0x13
 ; ============================================
 ; PROGRAMA PRINCIPAL
 ; ============================================
-    org prog_start
+    org 0x007
 main
-    swapf swap_mode_loc,f ; nibble swap y almaceno en misma ubicacion
-    movf rot_mode_loc,w
-    movwf rot_tmp_loc
-    bcf STATUS,C
-    rlf rot_mode_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    bcf STATUS,C
-    rlf rot_mode_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    bcf STATUS,C
-    rlf rot_mode_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    bcf STATUS,C
-    rlf rot_mode_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    bcf STATUS,C
-    rrf rot_tmp_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    bcf STATUS,C
-    rrf rot_tmp_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    bcf STATUS,C
-    rrf rot_tmp_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    bcf STATUS,C
-    rrf rot_tmp_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    movf rot_tmp_loc,w
-    iorwf rot_mode_loc,f
-;**********************************************************************
+    movf num1,w ; almaceno factores en temporales
+    movwf temp1
+    movf num2,w
+    movwf temp2
+    org 0x0B
+    bcf STATUS,Z ; limpio Z
+    movf temp2,f ; muevo sobre si mismo para luego analizar Z
+    btfsc STATUS,Z ; analizo z, si es 1 salteo, si no continuo y el prog termina
     goto $
+    call sum
+    addlw 1
+    subwf temp2,f
+    goto 0x0B
+    org 0x020
+sum
+    movf temp1,w
+    addwf temp_result,f
+    clrw
+    return
+;**********************************************************************
+    
     END ; directive 'end of program'
 
- 
+
+
+
+

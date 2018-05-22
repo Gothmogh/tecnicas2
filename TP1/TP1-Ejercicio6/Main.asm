@@ -1,4 +1,3 @@
-; Ejemplificación con variables:
 ; ------------------------------------------------------------------
 ; Encabezado
 ; ------------------------------------------------------------------
@@ -7,7 +6,6 @@
 ; ------------------------------------------------------------------
 ; Definición de Variables
 ; ------------------------------------------------------------------
-; acá van las definiciones de las variables con su posición
 prog_start equ 0x005
 swap_mode_loc equ 0x11
 rot_mode_loc equ 0x12
@@ -26,28 +24,26 @@ rot_tmp_loc equ 0x13
     org prog_start
 main
     swapf swap_mode_loc,f ; nibble swap y almaceno en misma ubicacion
-    movf rot_mode_loc,w
-    movwf rot_tmp_loc
+    movf rot_mode_loc,w ; muevo valor a registro W
+    movwf rot_tmp_loc ; muevo valor de W a registro temporal
+    bcf STATUS,C ; limpio el Carry y desplazo 1 bit a la izq - repito 4 veces
+    rlf rot_mode_loc,f 
     bcf STATUS,C
-    rlf rot_mode_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
+    rlf rot_mode_loc,f 
     bcf STATUS,C
-    rlf rot_mode_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
+    rlf rot_mode_loc,f 
     bcf STATUS,C
-    rlf rot_mode_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
+    rlf rot_mode_loc,f
+    bcf STATUS,C ; limpio el Carry y desplazo 1 bit a la der - repito 4 veces
+    rrf rot_tmp_loc,f 
     bcf STATUS,C
-    rlf rot_mode_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
+    rrf rot_tmp_loc,f 
     bcf STATUS,C
-    rrf rot_tmp_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
+    rrf rot_tmp_loc,f
     bcf STATUS,C
-    rrf rot_tmp_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    bcf STATUS,C
-    rrf rot_tmp_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    bcf STATUS,C
-    rrf rot_tmp_loc,f ; desplazo 1 bit a la izq y almaceno en misma ubicacion
-    movf rot_tmp_loc,w
-    iorwf rot_mode_loc,f
+    rrf rot_tmp_loc,f
+    movf rot_tmp_loc,w ; muevo registro temporal desplazado a la derecha al registro W
+    iorwf rot_mode_loc,f ; operación OR entre registro W y registro desplazado a la izq, almaceno en registro
 ;**********************************************************************
     goto $
-    END ; directive 'end of program'
-
- 
+    END ; directive 'end of program' 

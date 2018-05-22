@@ -1,4 +1,3 @@
-; Ejemplificación con variables:
 ; ------------------------------------------------------------------
 ; Encabezado
 ; ------------------------------------------------------------------
@@ -7,7 +6,6 @@
 ; ------------------------------------------------------------------
 ; Definición de Variables
 ; ------------------------------------------------------------------
-; acá van las definiciones de las variables con su posición
 prog_start equ 0x20
 test_reg equ 0x1B
 true_dest equ 0x5A
