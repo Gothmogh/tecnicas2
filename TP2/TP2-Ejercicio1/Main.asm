@@ -1,4 +1,10 @@
-; ------------------------------------------------------------------
+;
+; Ejercicio nº 1:
+; Escriba un programa para inicializar en “uno” un arreglo ubicado a partir de la dirección 40h.
+; El tamaño del arreglo se encuentra en la dirección 2Ah (utilizando direccionamiento
+; indirecto)     
+;    
+;------------------------------------------------------------------
 ; Encabezado
 ; ------------------------------------------------------------------
     list p=16f84a ; list directive to define processor
@@ -6,11 +12,10 @@
 ; ------------------------------------------------------------------
 ; Definición de Variables
 ; ------------------------------------------------------------------
-num1 equ 0x15
-num2 equ 0x16
-temp1 equ 0x17
-temp2 equ 0x18
-temp_result equ 0x19
+
+pointer_start equ 0x40
+length_location equ 0x2A
+
 ; -------------------------------------------------------------------
 ; Vectores
 ; ------------------------------------------------------------------
@@ -22,26 +27,20 @@ temp_result equ 0x19
 ; PROGRAMA PRINCIPAL
 ; ============================================
     org 0x007
-main
-    movf num1,w ; almaceno factores en temporales
-    movwf temp1
-    movf num2,w
-    movwf temp2
-    org 0x0B
-    bcf STATUS,Z ; limpio Z
-    movf temp2,f ; muevo sobre si mismo para luego analizar Z
-    btfsc STATUS,Z ; analizo z, si es 1 salteo, si no continuo y el prog termina
-    goto $
-    call sum
-    addlw 1
-    subwf temp2,f
-    goto 0x0B
-    org 0x020
-sum
-    movf temp1,w
-    addwf temp_result,f
-    clrw
-    return
+main 
+    movf  length_location,f	; opero sobre el registro para analizar si es 0
+    btfsc STATUS,Z		; 
+    goto  finish		; si es 0, termino
+    movlw pointer_start		; inicializa el puntero
+    movwf FSR			; a la RAM
+next	
+    movlw	0x01			; carga literal 1 en W
+    movwf	INDF			; carga W a registro INDF (donde apunta el puntero)
+    incf	FSR			; incrementa el puntero
+    decfsz	length_location		; decremento longitud
+    goto	next			; NO, carga el siguiente
+finish    
+    goto	$
 ;**********************************************************************
     
     END ; directive 'end of program'

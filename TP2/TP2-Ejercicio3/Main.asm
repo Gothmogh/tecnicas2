@@ -1,4 +1,9 @@
-; ------------------------------------------------------------------
+;
+; Escriba un programa para encontrar el menor elemento en un bloque de datos. La longitud del
+; bloque está en la dirección 31h, y el bloque comienza a partir de la dirección 32h. El resultado
+; debe guardarse en la dirección 50h.   
+;    
+;------------------------------------------------------------------
 ; Encabezado
 ; ------------------------------------------------------------------
     list p=16f84a ; list directive to define processor
@@ -6,11 +11,9 @@
 ; ------------------------------------------------------------------
 ; Definición de Variables
 ; ------------------------------------------------------------------
-num1 equ 0x15
-num2 equ 0x16
-temp1 equ 0x17
-temp2 equ 0x18
-temp_result equ 0x19
+
+eval equ 0x30
+
 ; -------------------------------------------------------------------
 ; Vectores
 ; ------------------------------------------------------------------
@@ -22,28 +25,28 @@ temp_result equ 0x19
 ; PROGRAMA PRINCIPAL
 ; ============================================
     org 0x007
-main
-    movf num1,w ; almaceno factores en temporales
-    movwf temp1
-    movf num2,w
-    movwf temp2
-    org 0x0B
-    bcf STATUS,Z ; limpio Z
-    movf temp2,f ; muevo sobre si mismo para luego analizar Z
-    btfsc STATUS,Z ; analizo z, si es 1 salteo, si no continuo y el prog termina
-    goto $
-    call sum
-    addlw 1
-    subwf temp2,f
-    goto 0x0B
-    org 0x020
-sum
-    movf temp1,w
-    addwf temp_result,f
-    clrw
-    return
+main 
+   
+    movf eval,w
+    call AKNCONV
+    goto main
 ;**********************************************************************
     
+    
+ 
+ AKNCONV addwf	    PCL,f
+	 retlw	    b'00000000'	    ;0
+	 retlw	    b'00000001'	    ;1
+	 retlw	    b'00000010'	    ;2
+	 retlw	    b'00000011'	    ;3
+	 retlw	    b'00000100'	    ;4
+	 retlw	    b'00001011'	    ;5
+	 retlw	    b'00001100'	    ;6
+	 retlw	    b'00001101'	    ;7
+	 retlw	    b'00001110'	    ;8
+	 retlw	    b'00001111'	    ;9
+	 
+ 
     END ; directive 'end of program'
 
 
