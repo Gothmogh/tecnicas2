@@ -1,5 +1,5 @@
-
-
+;
+; Dado un número almacenado en un registro transmitirlo por el pin A2.
 ;    
 ;------------------------------------------------------------------
 ; Encabezado
@@ -9,28 +9,17 @@
 ; ------------------------------------------------------------------
 ; Definición de Variables
 ; ------------------------------------------------------------------0
-;
-; INFO
-;    
-;    The rate selection, as already seen, is made by the BRGH bit in TXSTA register:
-;	--  1 = High speed
-;	--  0 = Low speed
-;   For each baud rate we need to calculate the value being placed in the SPBRG differently:
-;	SPBRG = (Fosc / (16 x Baud rate)) - 1, BRGH = 1 High Speed
-;	SPBRG = (Fosc / (64 x Baud rate)) - 1, BRGH = 0 Low Speed
-;    
-;   Calculo (Low speed):
-;    Baud rate = 1.2kbps = 1200bps
-;    SPBRG = (4MHz / (64 x 1200)) - 1 = 51.08 = 51 (parte entera)
-;    BRGH = 0 (Low speed)
-;    
-    
-SPBRG_VALUE equ d'51'
-SPEED_VALUE equ b'0'
+
+;   F=1/4T --- T=1*4/F
+;   Si F=4MHz --- T=1/F = 1*4/4000000 =1useg = 1 CM (ciclo máquina)
+CONT equ h'10'
+TEMP_VAR equ d'200'
 MULT1 equ d'50'
 MULT2 equ d'50'
 _MULT1 equ h'11'
 _MULT2 equ h'12'
+DATA_REG equ h'20'
+CONT2 equ h'13'
 
     ORG 0
     goto INICIO
@@ -40,13 +29,28 @@ _MULT2 equ h'12'
     bcf STATUS, RP0
 ; -- PROGRAMA PRINCIPAL
 INICIO
-    movlw b'1'
-    movwf PORTA
+    movlw d'8' ; long de palabra 8 bits
+    movwf CONT2 ; cargo a variable temporal
+LOOP
+    btfsc STATUS,Z;
+    goto FIN;
+    dcs
+    rlf DATA_REG ; rotación de dato hacia la izquierda, cargando msb en carry
+    btfsc STATUS, C ; analizo carry , si es 1 sigo, si es 0 salteo
+    goto HIGH_WRITE
+    goto LOW_WRITE
+HIGH_WRITE
+    bsf	PORTA, RA2
     call RETARDO ; 2 CM
+    decfsz CONT2
+    goto LOOP
+    goto FIN
+LOW_WRITE
     clrf PORTA
     call RETARDO ; 2 CM
-    goto INICIO
-
+    decfsz CONT2
+    goto LOOP
+    goto FIN
 RETARDO
     movlw MULT1 ; 1 CM
     movwf _MULT1 ; 1 CM
@@ -68,8 +72,13 @@ BUCLE
     goto RETARDO_1 ; 2 CM
     
     return ; 2CM
+FIN
     end;
 ;el retardo se calcula de la siguiente forma:
-; T = 2 (call) + 1 (movlw) + 1 (movwf) + (249)*1 (NOP) + [(249-1)*1 + 2] (decsfz) +
-; + (249-1)*2 (goto) + 2 (return)
-; T = 2 + 1 + 1 + 249 + 248 + 2 + 496 + 2 = 1.001 useg ≈ 1 mseg
+; T = 2 (call) + 1 (movlw) + 1 (movwf) + (200)*1 (NOP) + [(200-1)*1 + 2] (decsfz) +
+; + (200-1)*2 (goto) + 2 (return)
+; T = 2 + 1 + 1 + 249 + 248 + 2 + 496 + 2 = 803 useg
+;
+; agregados los multiplicadores, simplemente se setean con valores que multiplicados a T den el retardo deseado
+; TMult = MULT1 * MULT2 * T = 50 * 50 * 803 useg = 2007500 useg ≈ 2 seg
+; Frec Señal = 1 / TMult = 1 / 2 seg = 0.5 Hz

@@ -59,6 +59,10 @@ BUCLE
     return ; 2CM
     end;
 ;el retardo se calcula de la siguiente forma:
-; T = 2 (call) + 1 (movlw) + 1 (movwf) + (249)*1 (NOP) + [(249-1)*1 + 2] (decsfz) +
-; + (249-1)*2 (goto) + 2 (return)
-; T = 2 + 1 + 1 + 249 + 248 + 2 + 496 + 2 = 1.001 useg ≈ 1 mseg
+; T = 2 (call) + 1 (movlw) + 1 (movwf) + (200)*1 (NOP) + [(200-1)*1 + 2] (decsfz) +
+; + (200-1)*2 (goto) + 2 (return)
+; T = 2 + 1 + 1 + 249 + 248 + 2 + 496 + 2 = 803 useg
+;
+; agregados los multiplicadores, simplemente se setean con valores que multiplicados a T den el retardo deseado
+; TMult = MULT1 * MULT2 * T = 50 * 50 * 803 useg = 2007500 useg ≈ 2 seg
+; Frec Señal = 1 / TMult = 1 / 2 seg = 0.5 Hz
